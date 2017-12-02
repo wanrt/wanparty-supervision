@@ -1,8 +1,7 @@
 #!/usr/bin/php
 <?php
     
-    include_once('/var/www/https/auth/functions.inc.php');
-    $curl = curl_init();
+  $curl = curl_init();
 
 	curl_setopt_array($curl, array(
   		CURLOPT_URL => "http://127.0.0.1:3000/lua/wanparty.lua?mode=local&version=4",
@@ -23,26 +22,14 @@
 		}
 	}
 
-    $machines = Machine::active();
-    foreach ($machines as  $machine) {
+    foreach ($ntop_machines as  $host) {
        
-       if(isset($ntop_machines[$machine->ip])){
-       		$host = $ntop_machines[$machine->ip];
-       		echo str_pad( $machine->user, 17) . "\t" .
-       		     str_pad( $host->ip, 17) . "\t" . 
-       		     str_pad( $machine->mac, 17) . "\t" . 
+       		echo str_pad( $host->ip, 17) . "\t" . 
                str_pad( $host->thpt, 20) . "\t" . 
                str_pad( ($host->alerts=="0")?" ":"*", 1) . "\t" . 
        		     str_pad( $host->traffic, 20) . "\t" . 
        		     str_pad( $host->since, 50). "\n";
-       }else
-       		echo str_pad( $machine->user, 17) . "\t" .
-       		     str_pad( $machine->ip, 17) . "\t" . 
-       		     str_pad( $machine->mac, 17) . "\t" . 
-               str_pad( "-", 20) . "\t" . 
-               str_pad( " ", 1) . "\t" . 
-       		     str_pad( "-", 20) . "\t" . 
-       		     str_pad( $machine->datetime, 50). "\n";
+       
 
        
     }
