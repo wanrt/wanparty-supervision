@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Sohaib Lafifi <sohaib.lafifi@univ-artois.fr>
 Homepage: wanparty.neticien.net
 Package: wanparty-supervision
-Version: 1.12.2
+Version: 1.12.2.1
 Architecture: all
 Depends: php7.0-cli, php7.0-gd, php7.0, php7.0-ldap, php7.0-mcrypt, libapache2-mod-php7.0, ethtool,tcpdump, iperf, sudo, wanparty-ldap, php7.0-sqlite3, ntopng, php-curl
 Description: installation des outils de supervision sur le serveur local de la wan
