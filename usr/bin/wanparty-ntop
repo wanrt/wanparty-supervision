@@ -1,0 +1,50 @@
+#!/usr/bin/php
+<?php
+    
+    include_once('/var/www/https/auth/functions.inc.php');
+    $curl = curl_init();
+
+	curl_setopt_array($curl, array(
+  		CURLOPT_URL => "http://127.0.0.1:3000/lua/wanparty.lua?mode=local&version=4",
+  		CURLOPT_RETURNTRANSFER => true,
+  		CURLOPT_HTTPHEADER => array("cookie: user=nologin"),
+	));
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+	curl_close($curl);
+
+	if ($err) {
+  		echo "erreur curl lors de la connextion avec ntop #:" . $err;
+	} else {
+		$data = json_decode($response)->data;
+        $ntop_machines = array();
+		foreach($data as $host){
+                $ntop_machines[$host->ip] = $host;          
+		}
+	}
+
+    $machines = Machine::active();
+    foreach ($machines as  $machine) {
+       
+       if(isset($ntop_machines[$machine->ip])){
+       		$host = $ntop_machines[$machine->ip];
+       		echo str_pad( $machine->user, 17) . "\t" .
+       		     str_pad( $host->ip, 17) . "\t" . 
+       		     str_pad( $machine->mac, 17) . "\t" . 
+               str_pad( $host->thpt, 20) . "\t" . 
+               str_pad( ($host->alerts=="0")?" ":"*", 1) . "\t" . 
+       		     str_pad( $host->traffic, 20) . "\t" . 
+       		     str_pad( $host->since, 50). "\n";
+       }else
+       		echo str_pad( $machine->user, 17) . "\t" .
+       		     str_pad( $machine->ip, 17) . "\t" . 
+       		     str_pad( $machine->mac, 17) . "\t" . 
+               str_pad( "-", 20) . "\t" . 
+               str_pad( " ", 1) . "\t" . 
+       		     str_pad( "-", 20) . "\t" . 
+       		     str_pad( $machine->datetime, 50). "\n";
+
+       
+    }
+
+?>
